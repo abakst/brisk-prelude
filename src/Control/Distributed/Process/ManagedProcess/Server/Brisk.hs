@@ -14,6 +14,8 @@ import Control.Distributed.Process.Serializable
 import Control.Distributed.Process.ManagedProcess
   (handleCall, reply)
 {-# ANN module SpecModule #-}
+-- 'Emebed' the ProcessReply and Dispatcher types
+-- as the following:
 data ProcessReply b s = ReplyMsg b s
                       | NoReply  s
 type Dispatcher s     = s -> Process s
