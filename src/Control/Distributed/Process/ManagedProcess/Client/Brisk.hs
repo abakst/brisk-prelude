@@ -3,7 +3,7 @@
 {-# OPTIONS_GHC -fplugin Brisk.Plugin #-}
 {-# LANGUAGE TemplateHaskell #-}
 module Control.Distributed.Process.ManagedProcess.Client.Brisk
-  ( callSpec
+  ( -- callSpec
   ) where
 import Brisk.Annotations
 import Control.Distributed.Process hiding (call)

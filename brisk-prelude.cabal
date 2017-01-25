@@ -24,7 +24,7 @@ library
                    , Control.Distributed.BriskStatic.Brisk
                    , Control.Distributed.Process.Brisk
                    , Control.Distributed.Process.ManagedProcess.Server.Brisk
-                   , Control.Distributed.Process.ManagedProcess.Client.Brisk
+                   -- , Control.Distributed.Process.ManagedProcess.Client.Brisk
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >= 4 && < 5

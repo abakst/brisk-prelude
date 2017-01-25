@@ -1,8 +1,8 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# OPTIONS_GHC -fplugin Brisk.Plugin #-}
-{-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:pushBlob #-}
-{-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:dataNodeAPIHandler #-}
-module Managed (dataNodeAPIHandler, pushBlob) where
+{-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:runDataNode #-}
+{-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:dataNodeProcess #-}
+module Managed  where
 
 import Data.Binary
 import GHC.Generics (Generic)
@@ -14,7 +14,6 @@ import Control.Distributed.Process.ManagedProcess
 import GHC.Base.Brisk
 import Control.Distributed.Process.Brisk
 import Control.Distributed.BriskStatic.Brisk
-import Control.Distributed.Process.ManagedProcess.Client.Brisk
 import Control.Distributed.Process.ManagedProcess.Server.Brisk
 
 {-
@@ -48,14 +47,16 @@ data DataNodeResponse = OK
                       deriving (Eq, Ord, Show, Generic)
 instance Binary DataNodeResponse
 
+initState :: ProcessId -> DataNodeState
 initState m = DNS { blobs = M.empty, master = m }
 
 runDataNode :: ProcessId -> Process ()
 runDataNode m =
   serve (initState m) initializeDataNode dataNodeProcess
 
+
 initializeDataNode :: DataNodeState -> Process (InitResult DataNodeState)
-initializeDataNode s = return $ InitOk s NoDelay
+initializeDataNode x = return (InitOk x NoDelay)
 
 dataNodeProcess :: ProcessDefinition DataNodeState
 dataNodeProcess = defaultProcess {
