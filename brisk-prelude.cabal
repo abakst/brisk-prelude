@@ -22,7 +22,9 @@ library
                    , GHC.CString.Brisk
                    , Control.Exception.Base.Brisk
                    , Control.Distributed.BriskStatic.Brisk
+                   , Control.Distributed.Process.Brisk
                    , Control.Distributed.Process.ManagedProcess.Server.Brisk
+                   , Control.Distributed.Process.ManagedProcess.Client.Brisk
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >= 4 && < 5

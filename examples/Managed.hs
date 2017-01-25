@@ -1,8 +1,8 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# OPTIONS_GHC -fplugin Brisk.Plugin #-}
-{- OPTIONS_GHC -fplugin-opt Brisk.Plugin:runDataNode #-}
-{-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:dataNodeAPIHandler' #-}
-module Managed (dataNodeAPIHandler') where
+{-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:pushBlob #-}
+{-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:dataNodeAPIHandler #-}
+module Managed (dataNodeAPIHandler, pushBlob) where
 
 import Data.Binary
 import GHC.Generics (Generic)
@@ -12,7 +12,9 @@ import Control.Distributed.Process.Extras.Time
 import Control.Distributed.Process.ManagedProcess
 
 import GHC.Base.Brisk
+import Control.Distributed.Process.Brisk
 import Control.Distributed.BriskStatic.Brisk
+import Control.Distributed.Process.ManagedProcess.Client.Brisk
 import Control.Distributed.Process.ManagedProcess.Server.Brisk
 
 {-
