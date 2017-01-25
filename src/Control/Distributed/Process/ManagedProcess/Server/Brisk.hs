@@ -42,7 +42,7 @@ handleCallSpec f s0
        reply     <- f s0 msg
        case reply of
          NoReply s'    -> return s'
-         ReplyMsg r s' -> do _ <- send who r
+         ReplyMsg r s' -> do send who r
                              return s'
 
 {-# ANN replySpec (Assume 'reply) #-}
