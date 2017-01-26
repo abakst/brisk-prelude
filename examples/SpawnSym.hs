@@ -10,7 +10,6 @@ import Control.Distributed.Process.Closure
 import Control.Distributed.Process.SymmetricProcess
 
 import GHC.Base.Brisk
-import Control.Distributed.BriskStatic.Brisk
 
 p :: ProcessId -> Process ()
 p who = do self <- getSelfPid
@@ -33,4 +32,5 @@ main :: [NodeId] -> Process ()
 main nodes = do me     <- getSelfPid
                 symSet <- spawnSymmetric nodes $ $(mkBriskClosure 'p) me
                 broadCast symSet
+                ack (symSet `chooseSymmetric` 0)
                 return ()

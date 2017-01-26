@@ -12,8 +12,7 @@ import Control.Distributed.Process.ManagedProcess
 
 import GHC.Base.Brisk
 import Control.Distributed.Process.Brisk
-import Control.Distributed.BriskStatic.Brisk
-import Control.Distributed.Process.ManagedProcess.Server.Brisk
+import Control.Distributed.Process.ManagedProcess.Brisk
 
 {-
 DataNode:
