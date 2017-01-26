@@ -1,8 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# OPTIONS_GHC -fplugin Brisk.Plugin #-}
 {-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:runDataNode #-}
-{-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:dataNodeProcess #-}
-module Managed  where
+module Managed where
 
 import Data.Binary
 import GHC.Generics (Generic)

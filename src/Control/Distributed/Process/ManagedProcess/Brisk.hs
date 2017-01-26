@@ -2,7 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -fplugin Brisk.Plugin #-}
 {-# LANGUAGE TemplateHaskell #-}
-module Control.Distributed.Process.ManagedProcess.Server.Brisk
+module Control.Distributed.Process.ManagedProcess.Brisk
   ( handleCallSpec
   , replySpec
   , callSpec
