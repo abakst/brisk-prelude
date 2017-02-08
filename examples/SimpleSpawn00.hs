@@ -25,9 +25,8 @@ instance Binary ABigRecord
 child :: ProcessId -> Process ()
 child p = do me <- getSelfPid
              send p (Ping me)
-             msg <- expect
-             case msg of
-               Foo { b = q } -> send q (Foo { a = 0, b = me })
+             q <- expect
+             send q (Foo { a = 0, b = me })
              expect :: Process ()
 
 remotable ['child]
