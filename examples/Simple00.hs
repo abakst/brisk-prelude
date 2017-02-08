@@ -3,16 +3,13 @@
 {-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:main #-}
 module Simple00 (main) where
 
-import Control.Distributed.Process
+import GHC.Base.Brisk
+import Control.Distributed.Process.Brisk
 import Brisk.Annotations
 import Brisk.Model.Types hiding (Process)
 import Data.Binary
 import Data.Typeable
 import GHC.Generics (Generic)
-
-import GHC.Base.Brisk
-import GHC.CString.Brisk
-import Control.Exception.Base.Brisk
 
 data Ping = Ping ProcessId | Pong ProcessId
                deriving (Typeable, Generic)

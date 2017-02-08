@@ -1,13 +1,13 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
-{-# OPTIONS_GHC -fplugin Brisk.Plugin #-}
 module Control.Distributed.Process.ManagedProcess.Brisk
   ( handleCallSpec
   , replySpec
   , callSpec
   , defaultProcessSpec
   , serveSpec
+  , module Control.Distributed.Process.ManagedProcess
   ) where
 import Brisk.Annotations as Annot
 import Control.Distributed.BriskStatic.Internal

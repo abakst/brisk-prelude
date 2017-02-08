@@ -17,16 +17,18 @@ extra-source-files:  ChangeLog.md
 cabal-version:       >=1.10
 
 library
-  ghc-options: -fwarn-unused-binds
+  ghc-options: -fwarn-unused-binds -fplugin Brisk.Plugin
   exposed-modules:   GHC.Base.Brisk
                    , GHC.CString.Brisk
                    , Control.Exception.Base.Brisk
                    , Control.Distributed.Process.Brisk
                    , Control.Distributed.Process.ManagedProcess.Brisk
+                   , Prelude.Brisk
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >= 4 && < 5
                      , brisk
+                     , distributed-static
                      , distributed-process
                      , distributed-process-client-server
                      , distributed-process-extras

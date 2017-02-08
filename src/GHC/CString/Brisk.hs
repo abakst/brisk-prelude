@@ -1,6 +1,5 @@
 {-# LANGUAGE MagicHash #-}
 {-# LANGUAGE TemplateHaskell #-}
-{-# OPTIONS_GHC -fplugin Brisk.Plugin #-}
 module GHC.CString.Brisk (unpackCStringSpec) where
 import GHC.Prim
 import GHC.CString (unpackCString#)

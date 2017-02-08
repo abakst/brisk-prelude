@@ -5,35 +5,24 @@
 {-# OPTIONS_GHC -fplugin Brisk.Plugin #-}
 {-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:main #-}
 module Simple03 where
+import Control.Monad
 import Control.Distributed.Process
+import Control.Distributed.Process.SymmetricProcess
 import Data.Binary
 import Data.Typeable
 import GHC.Generics (Generic)
-
-data PingMsg = Ping ProcessId | Pong ProcessId       
-               deriving (Typeable, Generic)
-
-instance Binary PingMsg
+import GHC.Base.Brisk
 
 
-{-@ R(\X ..., xs) @-}
-{-
-b := b0
-while true
-{
-  if xs == []:
-    break
-  else:
-    x,xs := split(xs);
-    b    := f b x;
-}
-fold(...)
--}
-myFoldM :: (t1 -> t0 -> Process t1) -> t1 -> [t0] -> Process t1
-myFoldM f b []     = return b
-myFoldM f b (x:xs) = do b' <- f b x
-                        myFoldM f b' xs
-
-main :: Process () 
-main = do me <- getSelfPid
-          myFoldM (\a i -> send me i) () [1::Int,2,3]
+main :: SymSet ProcessId -> Process Int
+main set
+  = do me <- getSelfPid
+       res <- foldM go 0 set
+       return res
+         where
+           go :: Int -> ProcessId -> Process Int
+           go acc x = do send x ()
+                         msg <- expect :: Process Int
+                         case msg of
+                           0 -> return (1 + acc)
+                           _ -> return (2 + acc)
