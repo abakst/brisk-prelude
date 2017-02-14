@@ -13,8 +13,9 @@ import GHC.Base.Brisk
 
 p :: ProcessId -> Process ()
 p whom = do self <- getSelfPid
-            who  <- expectFrom whom
-            send who self
+            who  <- expect :: Process ProcessId
+            msg  <- selfSign self
+            send whom msg
             return ()
 
 remotable ['p]
@@ -27,8 +28,9 @@ pingPong pids
   = foldM go () pids
   where
     go _ x = do me  <- getSelfPid
-                msg <- selfSign me
-                send x msg
+                send x me
+                expectFrom x :: Process ProcessId
+                return ()
 
 main :: [NodeId] -> Process ()
 main nodes = do me     <- getSelfPid
