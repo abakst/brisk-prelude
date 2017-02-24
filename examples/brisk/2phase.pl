@@ -1,23 +1,50 @@
 %% proctype A:
-%%   ds_ddfZ := recv[Ping]
-%%   match ds_ddfZ:
-%%     case (Ping(q)):
-%%       send[ProcessId](q,A)
-%%       msg := recv[ABigRecord]
-%%       anf0 := case msg of
-%%                 Foo ds_ddg6 ds_ddg7 ->
-%%                   ds_ddg7
-%%       anf1 := Unit
-%%       send[Tuple](anf0,anf1)
-%%     __DEFAULT__:
-%%       abort
-%% proctype B:
-%%   anf0 := (Ping(B))
-%%   send[Ping](A,anf0)
-%%   q := recv[ProcessId]
-%%   anf1 := (Foo(0,B))
-%%   send[ABigRecord](q,anf1)
-%%   q := recv[Tuple]
+%%   ds_dbw6 := Unit
+%%   for x in %B_Set:
+%%     match ds_dbw6:
+%%       case Unit:
+%%         anf0 := (Tuple(%A,fn))
+%%         send[Tuple[ProcessId String]](x,anf0)
+%%   x := 0
+%%   for y in %B_Set:
+%%     msg := recv[AcceptorResponse]
+%%     match msg:
+%%       case (Accept(ds_dbwf)):
+%%         x := {@Int}
+%%       case Reject:
+%%         skip
+%%   match {@Bool}:
+%%     case False:
+%%       ds_dbw4 := Unit
+%%       for x in %B_Set:
+%%         match ds_dbw4:
+%%           case Unit:
+%%             anf1 := (Rollback(%A))
+%%             send[CoordMessage](x,anf1)
+%%     case True:
+%%       ds_dbw2 := Unit
+%%       for x in %B_Set:
+%%         match ds_dbw2:
+%%           case Unit:
+%%             anf2 := (Commit(%A))
+%%             send[CoordMessage](x,anf2)
+%% proctype (B:B_Set):
+%%   ds_dbwi := recv[Tuple[ProcessId String]]
+%%   match ds_dbwi:
+%%     case (Tuple(who,fn)):
+%%       anf0 := case {@Process Bool} of
+%%                 False ->
+%%                   Reject
+%%                 True ->
+%%                   (Accept(B))
+%%       send[AcceptorResponse](who,anf0)
+%%       msg := recv[CoordMessage]
+%%       anf1 := case msg of
+%%                 Commit p ->
+%%                   p
+%%                 Rollback p ->
+%%                   p
+%%       send[AcceptorAck](anf1,ACK)
 rewrite_query(T,skip,Ind,Name) :-
         Ind=[],
         %%%%% proctype A:
