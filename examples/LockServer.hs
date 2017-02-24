@@ -45,17 +45,22 @@ client server = do
   send server rel
 
 
-lockServer :: Process ()
-lockServer
-  = do (Lock p) <- expect
+lockServer :: SymSet ProcessId -> Process ()
+lockServer ps
+  = foldM go () ps
+  where
+    go _ _ = do
+       (Lock p) <- expect
        send p Granted
-       Release <- expect
-       lockServer
+       Release <- expectFrom p
+       return ()
+       
 
-remotable ['lockServer, 'client]
+remotable ['client]
 
 scenario :: NodeId -> [NodeId] -> Process ()
 scenario mnode cnodes
-  = do m  <- spawn mnode $ $(mkBriskStaticClosure 'lockServer )
-       cs <- spawnSymmetric cnodes $ $(mkBriskClosure 'client) m
+  = do master <- getSelfPid
+       cs <- spawnSymmetric cnodes $ $(mkBriskClosure 'client) master
+       lockServer cs
        return ()

@@ -38,10 +38,8 @@ acceptor = do
 
   -- Do the transaction
   exists <- liftIO $ doesDirectoryExist fn
-  if exists then
-    send who (Accept me)
-  else
-    send who Reject
+  let msg = if exists then Accept me else Reject
+  send who msg
 
   -- Wait for message to commit
   msg <- expect :: Process CoordMessage
