@@ -11,7 +11,7 @@ import Control.Distributed.Process.Extras.Time
 import Control.Distributed.Process.ManagedProcess
 
 import GHC.Base.Brisk
-import Control.Distributed.Process.Brisk
+import Control.Distributed.Process.Brisk hiding (call)
 import Control.Distributed.Process.ManagedProcess.Brisk
 
 {-

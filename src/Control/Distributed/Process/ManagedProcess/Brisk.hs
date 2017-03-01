@@ -28,12 +28,11 @@ import Control.Distributed.Process.ManagedProcess.Client
 {-# ANN module SpecModule #-}
 -- 'Emebed' the ProcessReply and Dispatcher types
 -- as the following:
-data ProcessReply b s = ReplyMsg b s
-                      | NoReply  s
+data ProcessReply b s = ReplyMsg b s | NoReply  s
 type Dispatcher s     = s -> Process s
 
 {-# ANN handleCallSpec (Assume 'handleCall) #-}
-handleCallSpec :: forall s a b.
+handleCallSpec :: forall a b s.
                   (Serializable a, Serializable b)
                => (s -> a -> Process (ProcessReply b s))
                -> Dispatcher s
@@ -63,13 +62,13 @@ defaultProcessSpec
                       }
 
 {-# ANN serveSpec (Assume 'serve) #-}
-serveSpec :: forall a s. a -> InitHandler a s -> ProcessDefinition s -> Process ()
+serveSpec :: forall goo st. goo -> InitHandler goo st -> ProcessDefinition st -> Process ()
 serveSpec x ih (ProcessDefinition { apiHandlers = [h] })
   = do InitOk s0 d0 <- ih x
        recvLoop s0
          where
-           recvLoop :: s -> Process ()
-           recvLoop st0 = do s' <- (top `castEffect` h :: s -> Process s) st0
+           recvLoop :: st -> Process ()
+           recvLoop st0 = do s' <- (top `castEffect` h :: st -> Process st) st0
                              recvLoop s'
 
 {-# ANN callSpec (Assume 'call) #-}
