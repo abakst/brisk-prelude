@@ -79,5 +79,5 @@ callSpec :: forall s a b.
          => ProcessId -> a -> Process b
 callSpec p m
   = do self <- getSelfPid
-       send p m
+       send p (self, m)
        expectFrom p

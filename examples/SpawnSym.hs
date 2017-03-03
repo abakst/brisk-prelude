@@ -1,5 +1,5 @@
-{-# OPTIONS_GHC -fplugin Brisk.Plugin #-}
-{-# OPTIONS_GHC -fplugin-opt Brisk.Plugin:main #-}
+{- OPTIONS_GHC -fplugin Brisk.Plugin #-}
+{- OPTIONS_GHC -fplugin-opt Brisk.Plugin:main #-}
 {-# LANGUAGE TemplateHaskell #-}
 module SpawnSym (main) where
 
@@ -13,8 +13,8 @@ import GHC.Base.Brisk
 
 p :: ProcessId -> Process ()
 p who = do self <- getSelfPid
-           send who self
-           return ()
+           expect :: Process ()
+           -- return ()
 
 remotable ['p]
 
@@ -32,5 +32,4 @@ main :: [NodeId] -> Process ()
 main nodes = do me     <- getSelfPid
                 symSet <- spawnSymmetric nodes $ $(mkBriskClosure 'p) me
                 broadCast symSet
-                ack (symSet `chooseSymmetric` 0)
                 return ()
