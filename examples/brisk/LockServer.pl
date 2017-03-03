@@ -28,7 +28,7 @@ rewrite_query(T,skip,Ind,Name) :-
                                                    cases(A, ds_ddbG, [ case(A, cstr__Lock(P), seq([ send(A, e_pid(P), tyCon(ty__Grant), cstr__Granted),
                                                                                                     recv(A, P, type(tyCon(ty__SelfSigned, tyCon(ty__Release))), msg),
                                                                                                     cases(A, msg, [ case(A, cstr__SelfSigned(_, Pay), assign(A, ds_ddbD, Pay))]),
-                                                                                                    cases(A, ds_ddbD, [ case(A, cstr__Release, assign(A, ds_ddbB, cstr__Unit))])]))])]))]),
+                                                                                                    cases(A, ds_ddbD, [ case(A, cstr__Release, assign(A, ds_ddbB, cstr__Unit))])]))])]))])
             
         TB=sym(B, set(B_Set), seq([ assign(B, anf0, cstr__Lock(B)),
                                        send(B, A, tyCon(ty__Lock), anf0),

@@ -23,8 +23,6 @@ library
                    , Control.Exception.Base.Brisk
                    , Control.Distributed.Process.Brisk
                    , Control.Distributed.Process.ManagedProcess.Brisk
-                   , ImportList
-                   , ExportList
 --                   , Prelude.Brisk
   -- other-modules:       
   -- other-extensions:    

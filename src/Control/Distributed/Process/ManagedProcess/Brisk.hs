@@ -13,6 +13,7 @@ import Brisk.Annotations as Annot
 import Control.Distributed.BriskStatic.Internal
 import Control.Distributed.Process hiding (call)
 import Control.Distributed.Process.Serializable
+import Control.Distributed.Process.SymmetricProcess
 import Control.Distributed.Process.ManagedProcess
   ( handleCall
   , serve
@@ -41,7 +42,8 @@ handleCallSpec f s0
        reply     <- f s0 msg
        case reply of
          NoReply s'    -> return s'
-         ReplyMsg r s' -> do send who r
+         ReplyMsg r s' -> do resp <- selfSign r
+                             send who resp
                              return s'
 
 {-# ANN replySpec (Assume 'reply) #-}
@@ -77,5 +79,5 @@ callSpec :: forall s a b.
          => ProcessId -> a -> Process b
 callSpec p m
   = do self <- getSelfPid
-       send p (self, m)
-       expect
+       send p m
+       expectFrom p
