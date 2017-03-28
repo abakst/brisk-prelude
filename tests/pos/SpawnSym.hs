@@ -13,6 +13,9 @@ import GHC.Base.Brisk
 
 p :: ProcessId -> Process ()
 p who = do self <- getSelfPid
+           c <- liftIO $ getChar
+           msg <- if c == 'x' then return (0 :: Int) else return 1
+           send who msg
            expect :: Process ()
            return ()
 
@@ -23,10 +26,12 @@ ack p = send p ()
 
 broadCast :: SymSet ProcessId -> Process ()
 broadCast pids
-  = do foldM go () pids
+  = do foldM go  0  pids
+       foldM go' () pids
        return ()
          where
-           go _ = ack
+           go _ p = expect :: Process Int
+           go'  _ = ack
 
 main :: [NodeId] -> Process ()
 main nodes = do me     <- getSelfPid

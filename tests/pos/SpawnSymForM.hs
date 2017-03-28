@@ -24,14 +24,13 @@ remotable ['p]
 ack :: ProcessId -> Process ()
 ack p = send p ()
 
+req = expect :: Process Int  
+
 broadCast :: SymSet ProcessId -> Process ()
-broadCast pids
-  = do forM pids go
-       forM pids go'
-       return ()
-         where
-           go  p = expect :: Process Int
-           go'   = ack
+broadCast pids = do
+  forM pids $ \p -> req
+  forM pids $ \p -> ack p
+  return ()
 
 main :: [NodeId] -> Process ()
 main nodes = do me     <- getSelfPid

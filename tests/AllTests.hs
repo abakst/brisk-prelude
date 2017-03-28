@@ -11,8 +11,9 @@ import Distribution.TestSuite
 
 tests :: IO [Test]
 tests = do pos <- fold runPosTests list
+           rfs <- fold runRFTests list
            dls <- fold runDLTests list
-           return (pos ++ dls)
+           return (pos ++ rfs ++ dls)
 
 
 runDLTests :: Shell Test
@@ -25,6 +26,12 @@ runDLTests = runTests "Deadlock Tests" checkPos dlTests
 runPosTests = runTests "Positive Tests" checkPos posTests
   where
     checkPos ExitSuccess     = Nothing
+    checkPos (ExitFailure c) = Just ("Unexpected Status: " ++ show c)
+
+runRFTests = runTests "RaceFree Tests" checkPos rfTests
+  where
+    checkPos (ExitFailure 3) = Nothing
+    checkPos ExitSuccess     = Just "Unexpected success"
     checkPos (ExitFailure c) = Just ("Unexpected Status: " ++ show c)
 
 runTests :: String -> (ExitCode -> Maybe String) -> Shell Turtle.FilePath -> Shell Test
@@ -46,7 +53,10 @@ runTests group check findTests
                       Left s -> unpack s
                       Right s -> unpack s
          mkRunCmd f = do
-           exit <- shell (format ("stack exec -- brisk "%fp%" main 1>/dev/null 2>/dev/null") f) Turtle.empty
+           exit <- shell (format ( "stack exec -- brisk --file "
+                                 % fp
+                                 % " --binder main 1>/dev/null 2>/dev/null"
+                                 ) f) Turtle.empty
            case check exit of
              Nothing -> 
                return $ Finished Pass
@@ -59,6 +69,9 @@ posTests = haskellFiles "tests/pos"
 
 dlTests :: Shell Turtle.FilePath
 dlTests = haskellFiles "tests/dl"
+
+rfTests :: Shell Turtle.FilePath
+rfTests = haskellFiles "tests/rf"  
 
 haskellFiles :: Turtle.FilePath -> Shell Turtle.FilePath
 haskellFiles = Turtle.find (star dot >> text ".hs")

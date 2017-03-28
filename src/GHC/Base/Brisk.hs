@@ -30,7 +30,7 @@ flipSpec f x y = f y x
 maybeSpec :: b -> (a -> b) -> Maybe a -> b
 maybeSpec d f z
   = case z of { Nothing -> d
-              ; Just a  -> f a
+              ; Just z  -> f z
               }
 
 buildSpec :: forall a. (forall b. (a -> b -> b) -> b -> b) -> [a]

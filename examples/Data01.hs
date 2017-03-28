@@ -20,18 +20,24 @@ instance Binary PingMessage
 
 pingProcess :: ProcessId -> Process ()         
 pingProcess whom = do me <- getSelfPid
-                      send whom $ Ping me
+                      doSend <- liftIO $ getChar
+                      if doSend == 'x' then
+                        send whom (Ping me)
+                      else
+                        send whom (Ping me)
+                      -- msg <- case doSend of
+                      --          'x' -> return (Ping me)
+                      --          _   -> return (Ping me)
                       expect :: Process PingMessage
                       return ()
 remotable ['pingProcess]
 
 pongProcess :: Process ()
-pongProcess = do msg       <- expect
+pongProcess = do msg <- expect
+                 me  <- getSelfPid
                  case msg of
-                   Ping whom -> do
-                     me  <- getSelfPid
-                     send whom $ Pong me
-                   _         -> return ()
+                   Ping whom -> send whom $ Pong me
+                   Pong x    -> send x $ Ping me
 
 main :: NodeId -> Process () 
 main n = do me  <- getSelfPid
